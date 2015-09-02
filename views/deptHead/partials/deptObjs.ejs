@@ -1,0 +1,25 @@
+<!-- Nav --!>
+<% include ../nav %>
+
+<!-- Page Content -->
+
+<h1>Objectives Assigned</h1>
+<table class="table table-hover">
+	<thead>
+		<tr>
+			<th>#</th>
+			<th>Objective</th>
+			<th>Date Assigned</th>
+			<th>Due Date</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="obj in user.Objectives">
+			<td><span><a href="/deptHead/deptObjDetail/{{obj.id}}">{{ $index + 1 }}</a></span></td>
+			<td>{{ obj.objective }}</td>
+			<td>{{ obj.createdAt | date }}</td>
+			<td>{{ obj.due_date | date }}</td>
+		</tr>
+	</tbody>
+</table>
+

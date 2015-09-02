@@ -1,0 +1,22 @@
+<html ng-app="myApp">
+  <head>
+    <% include ../header %>
+    <% include ../scripts %>
+  </head>
+
+  <body ng-cloak>
+
+    <% include nav %>
+
+    <div ng-controller="AdminCtrl">
+      <div ng-view="ng-view"></div>
+    </div>
+  </body>
+
+  <footer>
+    <% include ../footer %>
+  </footer>
+  
+
+
+</html>

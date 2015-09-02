@@ -1,0 +1,53 @@
+var bodyParser  =   require('body-parser'),
+    express     =   require('express'),
+    models      =   require('../models'),
+    router      =   express.Router(),
+    ProgRep     =   models.ProgressReport;
+
+router.get('/', function(req,res) {
+    ProgRep.findAll()
+        .then(function(progReps) {
+            res.send(progReps);
+        });
+});
+
+router.post('/', function(req, res) {
+    var newProgRep = {
+        status: req.body.status,
+        report_narrative: req.body.report_narrative,
+        ObjectiveId: req.body.ObjectiveId,
+    };
+
+    ProgRep.create(newProgRep)
+    .then(function(progRep) {
+        console.log(progRep);
+        res.send(progRep);
+    });
+});
+
+router.get('/:id', function(req,res) {
+    ProgRep.find({ where: {id: req.params.id }})
+        .then(function(progRep) {
+            res.send(progRep);
+        });
+});
+
+router.put('/:id', function(req,res) {
+    ProgRep.update({
+        status: req.body.status,
+        report_narrative: req.body.report_narrative
+    },
+    {
+        where: {id: req.params.id}
+    })
+    .then(function(){
+        ProgRep.findAll()
+        .then(function(reports) {
+            res.send({
+                response: reports
+            });
+        });
+    });
+});
+
+module.exports = router;

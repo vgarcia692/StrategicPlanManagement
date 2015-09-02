@@ -1,0 +1,21 @@
+{
+  "name": "StrategicPlanManagement",
+  "version": "0.0.0",
+  "homepage": "https://github.com/vgarcia692/StrategicPlanManagement",
+  "authors": [
+    "vgarcia692 <victor.lemae.garcia@gmail.com>"
+  ],
+  "description": "CMI Strategic Plan Management Application",
+  "keywords": [
+    "strategic",
+    "plan",
+    "cmi",
+    "management"
+  ],
+  "license": "MIT",
+  "dependencies": {
+      "bootstrap": "latest",
+      "font-awesome": "latest",
+      "angular": "latest"
+  }
+}

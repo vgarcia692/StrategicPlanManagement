@@ -1,0 +1,55 @@
+<!-- Nav -->
+<% include ../nav %>
+
+<h1>{{ goal.title }}</h1>
+<div class="panel">
+	<h2>Current Objectives</h2>
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Objective</th>
+				<th>Assigned To</th>
+				<th>Date Assigned</th>
+				<th>Due Date</th>				
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="obj in objectives">
+				<td>{{ $index + 1 }}</td>
+				<td>{{ obj.objective }}</td>
+				<td ng-repeat="user in obj.Users">{{ user.f_name }} {{ user.l_name }}</td>
+				<td>{{ obj.createdAt | date }}</td>
+				<td>{{ obj.due_date | date }}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<br>
+<hr>
+
+<div class="panel">
+	<form role="form">
+		<legend>Assign New Objective</legend>
+	
+		<div class="form-group">
+			<label for="objective">Objective</label>
+			<textarea class="form-control" id="objective" placeholder="Input Objective" ng-model="newObj.objective"></textarea>
+		</div>
+		
+		<div class="form-group">
+			<label for="assignee">DepartmentHead</label>
+			<select name="assignee" id="assignee" class="form-control" ng-model="newObj.assigneeId" ng-options="user.id as user.f_name + ' ' + user.l_name for user in users">
+			</select>
+		</div>
+
+		<div class="form-group">
+			<label for="dueDate">Due Date</label>
+			<input type="date" class="form-control" id="dueDate" ng-model="newObj.due_date">
+		</div>
+
+	
+		<button type="submit" class="btn btn-primary" ng-click="submitObj()">Add</button>
+	</form>
+</div>

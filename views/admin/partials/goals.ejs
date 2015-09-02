@@ -1,0 +1,20 @@
+<!-- Nav -->
+<% include ../nav %>
+
+<h1>CMI Goals</h1>
+<table class="table table-hover">
+	<thead>
+		<tr>
+			<th>#</th>
+			<th>Goal</th>
+			<th>Description</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="goal in goals">
+			<td>{{ $index + 1 }}</td>
+			<td><a href="/admin/goalDetail/{{goal.id}}">{{ goal.title }}</a></td>
+			<td>{{ goal.description }}</td>
+		</tr>
+	</tbody>
+</table>
