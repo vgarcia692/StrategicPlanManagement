@@ -16,59 +16,89 @@ angular.module('myApp.controllers', ['myApp.services'])
   }])
 
   //==============================GOALS DETAIL==============================
-  .controller('GoalDetailCtrl', ['$scope', 'Goals', 'Objectives', 'Users', '$routeParams', function($scope, Goals, Objectives, Users, $routeParams) {
-    $scope.goalId = $routeParams.id;
+  .controller('GoalDetailCtrl', ['$scope', 'Goals', 'Objectives', '$routeParams', 'UserData', 'Activities', function($scope, Goals, Objectives, $routeParams, UserData, Activities) {
+    
+        UserData.get(function(DBUserData) {
+        
+            $scope.user = DBUserData.user;
+       
+        });
 
-    $scope.goal = Goals.get({ id: $routeParams.id }, function(DBGoals) {
-      
-      $scope.kpis = DBGoals.KPIs;
-      $scope.objectives = DBGoals.Objectives;
-      $scope.activities = [];
+        $scope.goalId = $routeParams.id;
 
-      for (var i = 0; i < DBGoals.Objectives.length; i++) {
-        for (var x = 0; x < DBGoals.Objectives[i].Activities.length; x++) {
-            $scope.activities.push(DBGoals.Objectives[i].Activities[x]);
-        };
-      }
+        $scope.goal = Goals.get({ id: $routeParams.id }, function(DBGoals) {
+          
+          $scope.kpis = DBGoals.KPIs;
+          $scope.objectives = DBGoals.Objectives;
+          $scope.activities = [];
+
+          for (var i = 0; i < DBGoals.Objectives.length; i++) {
+            for (var x = 0; x < DBGoals.Objectives[i].Activities.length; x++) {
+                $scope.activities.push(DBGoals.Objectives[i].Activities[x]);
+            };
+          }
+
+          $scope.submitStatus = function(id, status) {
+                Activities.update({
+                    id: id,
+                    status: status
+                }, function(){
+                    alert('Activity Status Updated.');
+                }, function(err) {
+                    alert('Activity Failed to Update.');
+                })    
+          };
 
      
-    });
-
-    Users.query(function(DBUsers) {
-          $scope.users = DBUsers;
-
-    // CREATE A NEW OBJECTIVE
-        Date.prototype.yyyyMMdd = function () {
-            var yyyy = this.getFullYear().toString();
-            var MM = (this.getMonth()+1).toString(); // getMonth() is zero-based
-            var dd = this.getDate().toString();
-            return yyyy + "-" + (MM[1]?MM:"0"+MM[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
-        };
-
-        $scope.submitObj = function() {
-            var newObj = new Objectives({
-              objective: $scope.newObj.objective,
-              assigneeId: $scope.newObj.assigneeId,
-              due_date: new Date($scope.newObj.due_date).yyyyMMdd(),
-              goalId: $routeParams.id,
-              createdAt: new Date()
-            });
-            
-            newObj.$save(function(DBObj) {
-              $scope.objectives.push(DBObj);
-              $scope.newObj = '';
-            });
-
-        };
-
-
-    });
-
-   
+        });
   
     
   }])
   
+//==============================KPI Update==============================
+  .controller('KPIUpdateCtrl', ['$scope', '$http', '$routeParams', 'KPIs', function($scope, $http, $routeParams, KPIs) {
+    
+        KPIs.get({ id: $routeParams.id }, function(DBKPI){
+
+            $scope.kpi = DBKPI;
+
+            $scope.submitCurrentKPI = function(){
+                DBKPI.current = $scope.kpi.newCurrent;
+                DBKPI.$save();
+            }
+        
+        });
+
+        $scope.kpiValueEditAllowed = false;
+        var newfile = {};
+        $scope.uploadedFile = function(file){
+            newfile = file;
+        }
+
+        $scope.upload = function() {
+            if (newfile.size == undefined){
+                alert('Please choose a file.');
+            }
+            else {
+               var fd = new FormData();
+            fd.append('file', newfile)
+
+            $http.post('/api/kpiEvidenceUpload', fd, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            }).
+                then(function(res) {
+                    alert('File successfully uploaded.');
+                    $scope.kpiValueEditAllowed = true;
+                }, function(err) {
+                    console.log(err);
+                }) 
+            }
+            
+        };
+    
+  }])
+
   //=======================HOME=================================
   .controller('HomeCtrl', ['$scope', function ($scope) {
 
@@ -216,11 +246,11 @@ angular.module('myApp.controllers', ['myApp.services'])
 
     });
 
-      UserData.get(function(DBUserData) {
-        
+    UserData.get(function(DBUserData) {
+    
         $scope.user = DBUserData.user;
-       
-      });
+   
+    });
 
 
   }])

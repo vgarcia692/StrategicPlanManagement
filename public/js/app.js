@@ -66,6 +66,10 @@ config(function ($routeProvider, $locationProvider) {
       templateUrl: '/deptHead/partials/kpis',
       controller: 'GoalDetailCtrl'
     }).
+    when('/deptHead/kpiUpdate/:id', {
+        templateUrl:'deptHead/partials/kpiUpdate',
+        controller: 'KPIUpdateCtrl',
+    }).
     when('/deptHead/budget/:id', {
       templateUrl: '/deptHead/partials/budget',
       controller: 'ObjDetailCtrl'

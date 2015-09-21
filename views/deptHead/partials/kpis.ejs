@@ -13,6 +13,7 @@
                 <h1>{{goal.title}}</h1>
                 <h2>Key Performance Indicators</hw>
                 <br>
+                <br>
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
@@ -30,10 +31,10 @@
                             <td>{{ $index + 1 }}</td>
                             <td>{{ kpi.keyPerformanceIndicator }}</td>
                             <td>{{ kpi.keyTarget }}</td>
-                            <td>test original</td>
-                            <td>test current</td>
-                            <td>test goal</td>
-                            <td><button type"button" class="btn btn-default">Edit</button></td>
+                            <td>{{ kpi.base }}</td>
+                            <td>{{ kpi.current }}</td>
+                            <td>{{ kpi.target }}</td>
+                            <td><a href="deptHead/kpiUpdate/{{kpi.id}}">Update</a></td>
                         </tr>
                     </tbody>
                 </table>

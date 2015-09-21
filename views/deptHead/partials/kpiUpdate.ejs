@@ -1,0 +1,35 @@
+<!-- Nav --!>
+<% include ../nav %>
+<!-- Sidebar -->
+<% include ../sidebar %>
+<!-- /#sidebar-wrapper -->
+
+
+<!-- Page Content -->
+<div id="page-content-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>KPI Update {{kpi.keyPerformanceIndicator}}</h1>
+                <br>
+                <legend>Update Evidence</legend>
+                <p>In order to update the current value of the KPI you must first upload evidence of your update.</p>
+                <form enctype="multipart/form-data">
+                    <input required type="file" name="kpiEvidence" onchange="angular.element(this).scope().uploadedFile(this.files[0])"/>
+                    <br>
+                    <input class="btn btn-primary" type="submit" ng-click="upload()"/>
+                </form>
+                <br>
+                <legend>Current KPI Value</legend>
+                <form>
+                    <label>Enter Current Value:</label> 
+                    <input ng-if="!kpiValueEditAllowed" disabled type="number" placeholder="{{kpi.current}}">
+                    <input ng-if="!kpiValueEditAllowed" disabled type="submit" class="btn btn-primary">
+                    <input ng-if="kpiValueEditAllowed" type="number" placeholder="{{kpi.current}}" ng-model="kpi.newCurrent">
+                    <input ng-if="kpiValueEditAllowed" type="submit" class="btn btn-primary" ng-click="submitCurrentKPI()">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /#page-content-wrapper -->

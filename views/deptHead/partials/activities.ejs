@@ -18,20 +18,29 @@
                     <thead>
                         <tr>
                             <th>#</th>
+                            <th>Responsible Person</th>
                             <th>Activity</th>
                         </tr>
                     </thead>
                     <tbody ng-repeat="activity in activities">
                         <tr>
                             <td>{{ $index + 1 }}</td>
+                            <td>{{ activity.responsiblePerson }}</td>
                             <td>{{ activity.activity }}</td>
                             <td>
-                                <select name="status" id="status" class="form-control" ng-model="activity.status">
+                                <select ng-if="user.id == activity.UserId" name="status" id="status" class="form-control" ng-model="activity.status">
+                                    <option value="Not Started">Not Started</option>
+                                    <option value="In Process">In Process</option>
+                                    <option value="Completed">Completed</option>
+                                </select>
+                                <select ng-if="user.id != activity.UserId" disabled name="status" id="status" class="form-control" ng-model="activity.status">
                                     <option value="Not Started">Not Started</option>
                                     <option value="In Process">In Process</option>
                                     <option value="Completed">Completed</option>
                                 </select>
                             </td>
+                            <td><button ng-if="user.id != activity.UserId" disabled ng-click="submitStatus(activity.id, activity.status)" class="btn btn-success">Save</button></td>
+                            <td><button ng-if="user.id == activity.UserId" ng-click="submitStatus(activity.id, activity.status)" class="btn btn-success">Save</button></td>
                         </tr>
                     </tbody>
           </table>

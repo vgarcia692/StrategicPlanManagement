@@ -16,6 +16,7 @@ var express = require('express'),
   api = require('./routes/api'),
   http = require('http'),
   path = require('path');
+  multer = require('multer'),
   models = require(__dirname + '/models');
 
 require('./config/passport')(passport);
@@ -29,6 +30,7 @@ var progReps = require('./routes/progReps');
 var activities = require('./routes/activities');
 var kpis = require('./routes/kpis');
 var boardKpis = require('./routes/boardkpis');
+var kpiEvidenceUpload = require('./routes/kpiEvidenceUpload');
 
 
 var app = module.exports = express();
@@ -47,6 +49,22 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(methodOverride());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// UPLOAD FUNCTION FOR EVIDENCE FILES
+app.use(multer({
+    dest: __dirname + '/evidenceUploads',
+    rename: function(fieldname, filename) {
+        var d = new Date();
+        return d + '_' + filename;
+    },
+    onFileUploadStart: function(file){
+        console.log('Upload of ' + file.name + ' is starting ...');
+    },
+    onFileUploadComplete: function(file) {
+        console.log('File upload Complete.');
+    }
+}));
+
 
 app.use(session( { secret: 'cmistratplansecret', saveUninitialized: true, resave: true }));
 app.use(passport.initialize());
@@ -91,6 +109,7 @@ app.use('/api/progReps', progReps);
 app.use('/api/activities', activities);
 app.use('/api/kpis', kpis);
 app.use('/api/boardkpis', boardKpis);
+app.use('/api/kpiEvidenceUpload', kpiEvidenceUpload);
 
 // redirect all others to the index (HTML5 history)
 app.get('*', routes.index);

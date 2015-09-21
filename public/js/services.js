@@ -50,4 +50,18 @@ angular.module('myApp.services', ['ngResource'])
         });
     }])
 
+    .factory('KPIs', ['$resource', function($resource){
+        return $resource('/api/kpis/:id', {id: '@id'}, { // pull url from server
+            'update': { method:'PUT' }
+        });
+    }])
+
+    .factory('Activities', ['$resource', function($resource){
+        return $resource('/api/activities/:id', {id: '@id'}, { // pull url from server
+            'update': { method:'PUT' }
+        });
+    }])
+
+
+
     

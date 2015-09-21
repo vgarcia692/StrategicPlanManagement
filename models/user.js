@@ -15,6 +15,8 @@ module.exports = function(sequelize) {
     classMethods: {
       associate: function(models) {
         // associations can be defined here
+        User.hasMany(models.KPIs);
+        User.hasMany(models.Activities);
       }
     }
   });
