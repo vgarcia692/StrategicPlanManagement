@@ -9,7 +9,8 @@ angular.module('myApp', [
   'myApp.directives',
   'ngRoute',
   'ngGrid',
-  'googlechart'
+  'googlechart',
+  'ui.bootstrap'
 ]).
 config(function ($routeProvider, $locationProvider) {
   $routeProvider.
@@ -58,6 +59,10 @@ config(function ($routeProvider, $locationProvider) {
       templateUrl: '/deptHead/partials/boardKpis',
       controller: 'BoardKPICtrl'
     }).
+    when('/deptHead/boardKpisDetail/:id', {
+      templateUrl: '/deptHead/partials/boardKpisDetail',
+      controller: 'BoardKPIDetailCtrl'
+    }).
     when('/deptHead/deptObjDetail/:id', {
       templateUrl: '/deptHead/partials/deptObjDetail',
       controller: 'ObjDetailCtrl'
@@ -69,6 +74,10 @@ config(function ($routeProvider, $locationProvider) {
     when('/deptHead/kpiUpdate/:id', {
         templateUrl:'deptHead/partials/kpiUpdate',
         controller: 'KPIUpdateCtrl',
+    }).
+    when('/deptHead/activityUpdate/:id', {
+        templateUrl:'deptHead/partials/activityUpdate',
+        controller: 'ActivityUpdateCtrl'
     }).
     when('/deptHead/budget/:id', {
       templateUrl: '/deptHead/partials/budget',

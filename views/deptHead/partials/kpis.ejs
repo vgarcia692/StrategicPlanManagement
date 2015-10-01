@@ -20,9 +20,9 @@
                             <th>#</th>
                             <th>KPI</th>
                             <th>Target</th>
-                            <th>Original</th>
+                            <th>Base</th>
                             <th>Current</th>
-                            <th>Goal</th>
+                            <th>2016 Target</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -33,8 +33,8 @@
                             <td>{{ kpi.keyTarget }}</td>
                             <td>{{ kpi.base }}</td>
                             <td>{{ kpi.current }}</td>
-                            <td>{{ kpi.target }}</td>
-                            <td><a href="deptHead/kpiUpdate/{{kpi.id}}">Update</a></td>
+                            <td>{{ kpi.target2016 }}</td>
+                            <td><a ng-if="user.id == kpi.UserId" href="deptHead/kpiUpdate/{{kpi.id}}">Update</a></td>
                         </tr>
                     </tbody>
                 </table>

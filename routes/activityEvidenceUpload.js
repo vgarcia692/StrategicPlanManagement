@@ -6,7 +6,7 @@ var router = express.Router();
 
 
 router.post('/', [multer({
-    dest: __dirname + '/../kpiEvidenceUploads',
+    dest: __dirname + '/../activityEvidenceUploads',
     rename: function(fieldname, filename) {
         var d = new Date();
         return d + '_' + filename;

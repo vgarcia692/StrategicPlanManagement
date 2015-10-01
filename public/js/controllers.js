@@ -99,48 +99,95 @@ angular.module('myApp.controllers', ['myApp.services'])
     
   }])
 
-  //=======================HOME=================================
-  .controller('HomeCtrl', ['$scope', function ($scope) {
 
+//==============================Activities Update==============================
+  .controller('ActivityUpdateCtrl', ['$scope', '$http', '$routeParams', 'Activities', function($scope, $http, $routeParams, Activities) {
+    
+        Activities.get({ id: $routeParams.id }, function(DBAct){
+
+            $scope.activity = DBAct;
+
+            $scope.submitPercent = function(){
+                DBAct.statusPercent = $scope.activity.newPercent;
+                DBAct.$save();
+            }
+        
+        });
+
+        $scope.activityValueEditAllowed = false;
+        var newfile = {};
+        $scope.uploadedFile = function(file){
+            newfile = file;
+        }
+
+        $scope.upload = function() {
+            if (newfile.size == undefined){
+                alert('Please choose a file.');
+            }
+            else {
+               var fd = new FormData();
+            fd.append('file', newfile)
+
+            $http.post('/api/activityEvidenceUpload', fd, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            }).
+                then(function(res) {
+                    alert('File successfully uploaded.');
+                    $scope.activityValueEditAllowed = true;
+                }, function(err) {
+                    console.log(err);
+                }) 
+            }
+            
+        };
+    
+  }])
+
+  //=======================HOME=================================
+  .controller('HomeCtrl', ['$scope', 'Activities', function ($scope, Activities) {
+
+    //------------activities----------------
+    var inProcessCount = 0;
+    var notStartedCount = 0;
+    var completedCount = 0;
+    Activities.count({ count: true}, function(DBAct){
+        for (var i = 0; i < DBAct.length; i++) {
+            if (DBAct[i].status == 'In Process') {
+                inProcessCount = DBAct[i].count;
+            }
+            if (DBAct[i].status == 'Not Started') {
+                notStartedCount = DBAct[i].count;
+            }
+            if (DBAct[i].status == 'Completed') {
+                completedCount = DBAct[i].count;
+            }
+        };
+    
     var chart1 = {};
     chart1.type = "ColumnChart";
-    chart1.cssStyle = "height:500px; width:600px";
+    chart1.cssStyle = "height:500px; width:1200px";
     chart1.data = {"cols": [
-        {id: "month", label: "Month", type: "string"},
+        {id: "status", label: "Status", type: "string"},
         {id: "goal1-id", label: "Goal 1", type: "number"},
-        {id: "goal2-id", label: "Goal 2", type: "number"},
-        {id: "goal3-id", label: "Goal 3", type: "number"},
-        {id: "goal4-id", label: "Goal 4", type: "number"},
-        {id: "goal5-id", label: "Goal 5", type: "number"}
+
     ], "rows": [
         {c: [
             {v: "Not Started"},
-            {v: 19, f: "19"},
-            {v: 12, f: "12"},
-            {v: 7, f: "7"},
-            {v: 4},
-            {v: 6}
+            {v: notStartedCount},
         ]},
         {c: [
             {v: "In Process"},
-            {v: 13},
-            {v: 1, f: "1)"},
-            {v: 12},
-            {v: 2},
-            {v: 6}
+            {v: inProcessCount},
         ]},
         {c: [
             {v: "Completed"},
-            {v: 24},
-            {v: 0},
-            {v: 11},
-            {v: 6},
-            {v: 6}
+            {v: completedCount},
         ]}
     ]};
 
     chart1.options = {
-        "title": "Total Objective Activities Status",
+        "title": "Strategic Activities Status",
         "isStacked": "true",
         "fill": 20,
         "displayExactValues": true,
@@ -156,73 +203,30 @@ angular.module('myApp.controllers', ['myApp.services'])
 
     $scope.chart = chart1;
 
-    //-----------
+    });
 
-    var chart2 = {};
-    chart2.type = "PieChart";
-    chart2.cssStyle = "height:500px; width:600px";
-    chart2.data = {"cols": [
-        {id: "month", label: "Month", type: "string"},
-        {id: "goal1-id", label: "Goal 1", type: "number"},
-        {id: "goal2-id", label: "Goal 2", type: "number"},
-        {id: "goal3-id", label: "Goal 3", type: "number"},
-        {id: "goal4-id", label: "Goal 4", type: "number"},
-        {id: "goal5-id", label: "Goal 5", type: "number"}
-    ], "rows": [
-        {c: [
-            {v: "Not Started"},
-            {v: 19},
-            {v: 12},
-            {v: 7},
-            {v: 4},
-            {v: 6}
-        ]},
-        {c: [
-            {v: "In Process"},
-            {v: 13},
-            {v: 1},
-            {v: 12},
-            {v: 2},
-            {v: 6}
-        ]},
-        {c: [
-            {v: "Completed"},
-            {v: 24},
-            {v: 0},
-            {v: 11},
-            {v: 6},
-            {v: 6}
-        ]}
-    ]};
 
-    chart2.options = {
-        "title": "Total Key Performance Indicator Status",
-        "isStacked": "true",
-        "fill": 20,
-        "displayExactValues": true,
-        "vAxis": {
-            "title": "Activities", "gridlines": {"count": 6}
-        },
-        "hAxis": {
-            "title": "Status"
-        }
-    };
 
-    chart2.formatters = {};
-
-    $scope.chart2 = chart2;
+    Activities.query(function(DBActivities) {
+        $scope.activities = DBActivities;
+    })
 
   }])
 
 //========================BOARD KPI=======================================
-    .controller('BoardKPICtrl', ['$scope', 'BoardKPIs', function ($scope, BoardKPIs) {
+    .controller('BoardKPICtrl', ['$scope', 'BoardKPIs', 'UserData', function ($scope, BoardKPIs, UserData) {
+
+        UserData.get(function(DBUserData) {
+        
+            $scope.user = DBUserData.user;
+        });
 
         BoardKPIs.query(function(DBBoardKPIs) {
             $scope.boardKPIs = DBBoardKPIs;
         });
 
     }])
-  
+ //======================================= 
   .controller('AdminCtrl', function ($scope, $http) {
     // write Ctrl here
     // $http({
@@ -254,6 +258,33 @@ angular.module('myApp.controllers', ['myApp.services'])
 
 
   }])
+
+  //========================BOARD KPI DETAIL=======================================
+.controller('BoardKPIDetailCtrl', ['$scope', 'BoardKPIs', '$routeParams', function ($scope, BoardKPIs, $routeParams) {
+
+
+        BoardKPIs.get({ id: $routeParams.id }, function(DBBKPI){
+
+            $scope.bkpi = DBBKPI;
+
+            $scope.submit = function(){
+                DBBKPI.f15 = $scope.bkpi.f15;
+                DBBKPI.sp16 = $scope.bkpi.sp16;
+                DBBKPI.su16 = $scope.bkpi.su16;
+                DBBKPI.f16 = $scope.bkpi.f16;
+                DBBKPI.sp17 = $scope.bkpi.sp17;
+                DBBKPI.su17 = $scope.bkpi.su17;
+                DBBKPI.f17 = $scope.bkpi.f17;
+                DBBKPI.sp18 = $scope.bkpi.sp18;
+                DBBKPI.sp18 = $scope.bkpi.sp18;
+                DBBKPI.f18 = $scope.bkpi.f18;
+                DBBKPI.$update();
+            }
+
+        });
+
+}])
+  
 
 //==============================PROGRESS REPORTS==============================
 .controller('ProgRepCtrl', ['$scope', 'ProgReports', 'Objectives', '$routeParams', function($scope, ProgReports, Objectives, $routeParams) {
@@ -326,6 +357,8 @@ angular.module('myApp.controllers', ['myApp.services'])
 
 
 }])
+
+
 
 //==============================OBJECTIVE & BUDGET==============================
 .controller('ObjDetailCtrl', ['$scope', 'UserData', 'Objectives', 'Budgets', '$routeParams', function ($scope, UserData, Objectives, Budgets, $routeParams) {

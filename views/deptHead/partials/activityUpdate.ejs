@@ -1,0 +1,35 @@
+<!-- Nav --!>
+<% include ../nav %>
+<!-- Sidebar -->
+<% include ../sidebar %>
+<!-- /#sidebar-wrapper -->
+
+
+<!-- Page Content -->
+<div id="page-content-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>Activity Update {{activity.activity}}</h1>
+                <br>
+                <legend>Update Evidence</legend>
+                <p>In order to update the current value of nthe Activity Progress Percent you must first upload evidence of your update.</p>
+                <form enctype="multipart/form-data">
+                    <input required type="file" name="activityEvidence" onchange="angular.element(this).scope().uploadedFile(this.files[0])"/>
+                    <br>
+                    <input class="btn btn-primary" type="submit" ng-click="upload()"/>
+                </form>
+                <br>
+                <legend>Current Activity Progress Percentage</legend>
+                <form>
+                    <label>Enter Current Value:</label> 
+                    <input ng-if="!activityValueEditAllowed" disabled type="number" placeholder="{{activity.statusPercent}}">
+                    <input ng-if="!activityValueEditAllowed" disabled type="submit" class="btn btn-primary">
+                    <input ng-if="activityValueEditAllowed" type="number" placeholder="{{activity.statusPercent}}" ng-model="activity.newPercent">
+                    <input ng-if="activityValueEditAllowed" type="submit" class="btn btn-primary" ng-click="submitPercent()">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /#page-content-wrapper -->

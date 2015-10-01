@@ -58,7 +58,7 @@ angular.module('myApp.services', ['ngResource'])
 
     .factory('Activities', ['$resource', function($resource){
         return $resource('/api/activities/:id', {id: '@id'}, { // pull url from server
-            'update': { method:'PUT' }
+            'update': { method:'PUT' }, 'count': {method:'GET', isArray:true}
         });
     }])
 

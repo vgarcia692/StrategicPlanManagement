@@ -5,7 +5,9 @@ module.exports = function(sequelize, DataTypes) {
     keyTarget: DataTypes.TEXT,
     base: DataTypes.FLOAT,
     current: DataTypes.FLOAT,
-    target: DataTypes.FLOAT   
+    target2016: DataTypes.FLOAT,
+    target2017: DataTypes.FLOAT,
+    target2018: DataTypes.FLOAT   
   }, {
     classMethods: {
       associate: function(models) {

@@ -31,7 +31,7 @@ var activities = require('./routes/activities');
 var kpis = require('./routes/kpis');
 var boardKpis = require('./routes/boardkpis');
 var kpiEvidenceUpload = require('./routes/kpiEvidenceUpload');
-
+var activityEvidenceUpload = require('./routes/activityEvidenceUpload');
 
 var app = module.exports = express();
 
@@ -51,19 +51,19 @@ app.use(methodOverride());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // UPLOAD FUNCTION FOR EVIDENCE FILES
-app.use(multer({
-    dest: __dirname + '/evidenceUploads',
-    rename: function(fieldname, filename) {
-        var d = new Date();
-        return d + '_' + filename;
-    },
-    onFileUploadStart: function(file){
-        console.log('Upload of ' + file.name + ' is starting ...');
-    },
-    onFileUploadComplete: function(file) {
-        console.log('File upload Complete.');
-    }
-}));
+// app.use(multer({
+//     dest: __dirname + '/kpiEvidenceUploads',
+//     rename: function(fieldname, filename) {
+//         var d = new Date();
+//         return d + '_' + filename;
+//     },
+//     onFileUploadStart: function(file){
+//         console.log('Upload of ' + file.name + ' is starting ...');
+//     },
+//     onFileUploadComplete: function(file) {
+//         console.log('File upload Complete.');
+//     }
+// }));
 
 
 app.use(session( { secret: 'cmistratplansecret', saveUninitialized: true, resave: true }));
@@ -110,6 +110,7 @@ app.use('/api/activities', activities);
 app.use('/api/kpis', kpis);
 app.use('/api/boardkpis', boardKpis);
 app.use('/api/kpiEvidenceUpload', kpiEvidenceUpload);
+app.use('/api/activityEvidenceUpload', activityEvidenceUpload);
 
 // redirect all others to the index (HTML5 history)
 app.get('*', routes.index);

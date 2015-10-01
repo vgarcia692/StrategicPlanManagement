@@ -17,6 +17,7 @@ module.exports = function(sequelize) {
         // associations can be defined here
         User.hasMany(models.KPIs);
         User.hasMany(models.Activities);
+        User.hasMany(models.BoardKPIs);
       }
     }
   });

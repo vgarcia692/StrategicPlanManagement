@@ -20,6 +20,8 @@
                             <th>#</th>
                             <th>Responsible Person</th>
                             <th>Activity</th>
+                            <th>Status</th>
+                            <th>Percent Completed</th>
                         </tr>
                     </thead>
                     <tbody ng-repeat="activity in activities">
@@ -28,7 +30,7 @@
                             <td>{{ activity.responsiblePerson }}</td>
                             <td>{{ activity.activity }}</td>
                             <td>
-                                <select ng-if="user.id == activity.UserId" name="status" id="status" class="form-control" ng-model="activity.status">
+                                <select ng-if="user.id == activity.UserId" name="status" id="status" ng-model="activity.status">
                                     <option value="Not Started">Not Started</option>
                                     <option value="In Process">In Process</option>
                                     <option value="Completed">Completed</option>
@@ -39,8 +41,9 @@
                                     <option value="Completed">Completed</option>
                                 </select>
                             </td>
-                            <td><button ng-if="user.id != activity.UserId" disabled ng-click="submitStatus(activity.id, activity.status)" class="btn btn-success">Save</button></td>
-                            <td><button ng-if="user.id == activity.UserId" ng-click="submitStatus(activity.id, activity.status)" class="btn btn-success">Save</button></td>
+                            <td>{{ activity.statusPercent }}%</td>
+                            <td><button ng-if="user.id != activity.UserId" disabled ng-click="submitStatus(activity.id, activity.status)" class="btn btn-success">Save Status</button></td>
+                            <td><button ng-if="user.id == activity.UserId" ng-click="submitStatus(activity.id, activity.status)" class="btn btn-success">Save Status</button><a ng-if="user.id == activity.UserId" href="deptHead/activityUpdate/{{activity.id}}">Update Percent</a></td>
                         </tr>
                     </tbody>
           </table>
